@@ -1,0 +1,8 @@
+results/
+dem/
+taming/
+process_data/north_*_96px_20MPP*
+process_data/south_*_96px_20MPP*
+*.png
+*.tif
+*.sh
