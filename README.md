@@ -39,7 +39,7 @@ We provide the train/val/test indices for the entire dataset at `PATH_TO_SR_FOLD
 The proposed model is a latent-space Schrödinger bridge. Therefore, VAE model training is required first, followed by SB model training. During training, model checkpoints (containing the model weights) will be saved intermittently. Additionally, validation metrics will be computed on the validation split of the data, and plots of the validation metrics and sampled DEM patches will be provided.
 
 ### Variational Autoencoder (VAE) Training
-Train a VAE, providing a model identifier integer `VAE_ID`
+Train a VAE, providing a model identifier integer `VAE_ID`.
 
 `python autoencoder_trainer.py --model_id=VAE_ID`
 
