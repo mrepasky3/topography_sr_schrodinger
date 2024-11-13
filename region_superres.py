@@ -24,6 +24,8 @@ from mpl_toolkits.axes_grid1 import make_axes_locatable
 
 
 parser = argparse.ArgumentParser()
+parser.add_argument('--path_to_dem', type=str, default="process_data/large_region_3840px_20MPP")
+
 parser.add_argument('--model_id', type=int, default=5) # numeric model id
 parser.add_argument('--model_epoch', type=int, default=55)
 
@@ -122,12 +124,14 @@ stride = args.stride
 
 
 # load large dem and rendered images
-root = "dem/large_region"
-dem_patch = torch.tensor(np.load(f"{root}/dem_patch.npy")).unsqueeze(1)[:,:,:args.region_size,:args.region_size]
+root = args.path_to_dem
+dem_patch = np.array(xr.open_dataarray(f"{root}/hd_patch.tif").data)
+dem_patch = torch.tensor(dem_patch).unsqueeze(1)[:,:,:args.region_size,:args.region_size]
 
 all_imgs_patch = []
 for img_name in ["5","10","20","30","45","60-85"]:
-	all_imgs_patch.append(torch.tensor(np.load(f"{root}/imgs_patch_{img_name}.npy")[:,:args.region_size,:args.region_size]).unsqueeze(1))
+	_img_patch = np.array(xr.open_dataarray(f"{root}/imgs_patch_{img_name}.tif").data)
+	all_imgs_patch.append(torch.tensor(_img_patch[:,:args.region_size,:args.region_size]).unsqueeze(1))
 all_imgs_patch = torch.cat(all_imgs_patch)
 
 azi_ele_list = []

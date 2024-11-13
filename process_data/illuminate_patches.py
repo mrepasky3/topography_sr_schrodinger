@@ -11,7 +11,6 @@ import xarray as xr
 import rioxarray
 
 from src.shadowspy.dem_processing import prepare_dem_mesh
-# from src.shadowspy.render_dem import render_at_date
 from render_dem import render_at_date
 from src.shadowspy.coord_tools import unproject_stereographic
 from src.mesh_operations.mesh_utils import import_mesh
