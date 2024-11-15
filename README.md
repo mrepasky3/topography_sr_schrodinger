@@ -84,3 +84,11 @@ A pre-trained model can be applied for super-resolution of the large rendered re
 `python region_superres.py --model_id=MODEL_ID --model_epoch=MODEL_EPOCH --num_imgs=NUM_IMGS --lon=LONGITUDE --lat=LATITUDE --nfe=NUM_FUNCTION_EVALS --n_repeat=N_REPEAT --region_size=REGION_SIZE --stride=48 --weight_sigma=2`
 
 The `REGION_SIZE` in pixels parameter constrains the size of the large region. The `stride` controls the "step" of the moving window (in pixels) and `weight_sigma` is the weight of the Gaussian convolution to the grassfire filter.
+
+### References
+Portions of the code corresponding to the following works were used in the creation of this repository:  
+* I2SB: Image-to-Image Schrödinger Bridge, Liu, et al., ICML 2023. (https://github.com/NVlabs/I2SB) (`bridge` code)
+* Scalable Diffusion Models with Transformers, Peebles and Xie, ICCV 2023. (https://github.com/facebookresearch/DiT) (`diffusion_transformer` code)
+* Diffusion Models Beat GANS on Image Synthesis, Dhariwal and Nichol, NeurIPS 2021. (https://github.com/openai/guided-diffusion) (some code in `diffusion_transformer`)
+* High-Resolution Image Synthesis with Latent Diffusion Models, Rombach et al., CVPR 2022. (https://github.com/CompVis/latent-diffusion) (`latent_diffusion` code)
+* Taming Transformers for High-Resolution Image Synthesis, Esser et al., CVPR 2021. (https://github.com/CompVis/taming-transformers) (some code in `latent_diffusion`)
