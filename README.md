@@ -7,16 +7,19 @@ The variational autoencoder (VAE) and Schrödinger bridge (SB) network checkpoin
 3) Unzip `bettersun_bridge_20-320MPP_005.zip` into `PATH_TO_SR_FOLDER/results/`
 
 ### Install Python Dependencies
-1) `cd PATH_TO_SR_FOLDER`
-2) `pip install -r requirements.txt`
+1) Create and activate a Python environment with version 3.9. For instance, using conda:  
+`conda create -n topo_sb python=3.9 pip`  
+`conda activate topo_sb`  
+2) Install topography Schrödinger bridge dependencies:  
+`pip install -r requirements.txt`
 
 To re-create the training, validation, and testing datasets, see the following sub-sections.
 
-### ShadowSpy
-ShadowSpy, a ray-tracing DEM rendering software, is required to create datasets for training, validation, and testing. Follow the instructions at https://github.com/steo85it/shadowspy/tree/v0.1.0 to install ShadowSpy version 0.1.0.
-
 ### LOLA DEM
 The south pole topography model used to train this model can be found at https://pgda.gsfc.nasa.gov/products/90, the file `LDEM_80S_20MPP_ADJ.TIF`. This is the processed LOLA DEM covering the lunar south polar 80&deg;-90&deg; south at 20 meters-per-pixel. A similar approach can be taken for the north pole LOLA DEM.
+
+### ShadowSpy (Optional)
+ShadowSpy, a ray-tracing DEM rendering software, is required to create datasets for training, validation, and testing. Follow the instructions at https://github.com/steo85it/shadowspy/tree/v0.1.0 to install ShadowSpy version 0.1.0 into a separate Python environment.
 
 
 # Construct Datasets
@@ -24,11 +27,11 @@ The south pole topography model used to train this model can be found at https:/
 ### Rendered Small Patches Dataset
 The datasets consist of processed LOLA DEM patches which are each rendered from 360 illumination angles. Before running the following scripts, change `path_to_furnsh` to the `shadowspy/examples/aux/simple.furnsh` directory of your local installation of ShadowSpy (line 60 of `illuminate_patches.py` and line 54 of `illuminate_large_region.py`).
 
-The first stage of dataset generation creates sub-directories for each patch, including the patch TIF and a TIF containing the 360 images. If each patch is 96 pixels, this corresponds to 315 "columns" in the LOLA DEM (`COLUMN_ID={0, ..., 314}`) each yielding 315 patches of size 96 by 96 pixels. We rendering low-elevation sun and high-elevation sun separately `ILLUM_TYPE={lowsunele, highsunele}`.
+The first stage of dataset generation creates sub-directories for each patch, including the patch TIF and a TIF containing the 360 images. If each patch is 96 pixels, this corresponds to 315 "columns" in the LOLA DEM (`COLUMN_ID={0, ..., 314}`) each yielding 315 patches of size 96 by 96 pixels. We rendering low-elevation sun and high-elevation sun separately `ILLUM_TYPE={lowsunele, highsunele}`. Using the ShadowSpy Python environment:
 1) `cd PATH_TO_SR_FOLDER/process_data/`
 2) `python illuminate_patches.py --tif_path=PATH_TO_LOLA_DEM --illum_type=ILLUM_TYPE --column=COLUMN_ID`
 
-The previous step will result in a directory `PATH_TO_SR_FOLDER/process_data/south_ILLUM_TYPE_96px_20MPP/patch_XXXXXX` containing files `hd_patch.tif` and `imgs_patch.tif`, which include a DEM patch and the associated images. Once a large number of these patches are rendered, the following steps can be used to aggregate them into hdf5 files (this helps to iterate over a large number of patches more efficiently, for training and evaluation).
+The previous step will result in a directory `PATH_TO_SR_FOLDER/process_data/south_ILLUM_TYPE_96px_20MPP/patch_XXXXXX` containing files `hd_patch.tif` and `imgs_patch.tif`, which include a DEM patch and the associated images. Once a large number of these patches are rendered, the following steps can be used to aggregate them into hdf5 files (this helps to iterate over a large number of patches more efficiently, for training and evaluation). Using the topography Schrödinger bridge Python environment:
 1) `cd PATH_TO_SR_FOLDER/process_data/`
 2) `python convert_hdf5.py --illum_type=ILLUM_TYPE --patch_start=START_IDX --patch_end=END_IDX`
 
@@ -37,7 +40,7 @@ The `START_IDX` and `END_IDX` control how many patches are contained within this
 We provide the train/val/test indices for the entire dataset at `PATH_TO_SR_FOLDER/process_data/thresh2242_{train,val,test}_idx.npy`. If you do not create the entire dataset, replace these with your own partitioning.
 
 ### Rendered Large Region
-The following command can be used to render a larger region. This can be used for evaluation of pre-trained models.
+The following command can be used to render a larger region. This can be used for evaluation of pre-trained models. Using the ShadowSpy Python environment:
 1) `cd PATH_TO_SR_FOLDER/process_data/`
 2) `python illuminate_large_region.py --tif_path=PATH_TO_LOLA_DEM`
 
